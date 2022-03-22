@@ -1,76 +1,94 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
     .progress {
-        background-color: #fff;
-        border-radius: 0px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        font-weight: 600;
+      background-color: #fff;
+      border-radius: 0px;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      font-weight: 600;
+      overflow: hidden;
+      animation: expand 2s ease forwards;
+    }
+
+    @keyframes expand {
+      from {
+        width: 0%;
+      }
+
+      to {
+        width: 100%;
+      }
     }
 
     .ppp-color {
-        background: #AEE6B5;
-        color: #000;
+      background: #AEE6B5;
+      color: #000;
     }
 
     .oop-color {
-        background: #9DF3FF;
-        color: #000;
+      background: #9DF3FF;
+      color: #000;
     }
 
     .totalCost-color {
-        color: #1C80C7;
-        font-weight: 600;
+      color: #1C80C7;
+      font-weight: 600;
     }
 
     .details-color {
-        color: #C3DDF0
+      color: #C3DDF0
     }
-</style>
-
-<body>
+  </style>
+  <body>
     <div ng-app="myApp" ng-controller="myController">
-        <div class="container">
-            <h2>Stacked Progress Bars</h2>
-            <div ng-repeat="list in mbmList" ng-style="{ 'width' :'{{(list.ann_tot_cost/highestCost)*100}}%' }" class="pull-right">
-                <div style="text-align:right;color:#C3DDF0;"> <span class="totalCost-color">${{list.ann_tot_cost}}</span> <a href="javascript:void();" style="text-decoration:underline;">details</a> </div>
-                <div class="progress">
-                    <div class="progress-bar ppp-color" role="progressbar" ng-style="{ 'width' :'{{(list.ann_ppp_cost/list.ann_tot_cost)*100}}%' }"> ${{list.ann_ppp_cost}} </div>
-                    <div class="progress-bar oop-color" role="progressbar" ng-style="{ 'width' :'{{(list.ann_oop_cost/list.ann_tot_cost)*100}}%' }"> ${{list.ann_oop_cost}} </div>
-                </div>
-            </div>
+      <div class="container">
+        <h2>Stacked Progress Bars</h2>
+        <div ng-repeat="list in mbmList" ng-style="{ 'width' :'{{(list.ann_tot_cost/highestCost)*100}}%' }" class="pull-right">
+          <div style="text-align:right;color:#C3DDF0;">
+            <span class="totalCost-color">${{list.ann_tot_cost}}</span>
+            <a href="javascript:void();" style="text-decoration:underline;">details</a>
+          </div>
+          <div class="progress">
+            <div class="progress-bar ppp-color" value="'{{(list.ann_ppp_cost/list.ann_tot_cost)*100}}%'" role="progressbar" ng-style="{ 'width' :'{{(list.ann_ppp_cost/list.ann_tot_cost)*100}}%' }"> ${{list.ann_ppp_cost}} </div>
+            <div class="progress-bar oop-color" value="'{{(list.ann_oop_cost/list.ann_tot_cost)*100}}%'" role="progressbar" ng-style="{ 'width' :'{{(list.ann_oop_cost/list.ann_tot_cost)*100}}%' }"> ${{list.ann_oop_cost}} </div>
+          </div>
         </div>
+      </div>
     </div>
     <script>
-        var app = angular.module('myApp', []);
-        app.controller('myController', function($scope) {
-            $scope.mbmList = [{
-                "option": "00",
-                "ann_ppp_cost": "14521",
-                "ann_oop_cost": "3359",
-                "ann_tot_cost": "17880"
-            }, {
-                "option": "01",
-                "ann_ppp_cost": "11320",
-                "ann_oop_cost": "2853",
-                "ann_tot_cost": "14173"
-            }, {
-                "option": "01",
-                "ann_ppp_cost": "2500",
-                "ann_oop_cost": "7500",
-                "ann_tot_cost": "10000"
-            }] $scope.highestCost = Math.max.apply(Math, $scope.mbmList.map(function(o) {
-                return o.ann_tot_cost;
-            }))
-        });
+      var app = angular.module('myApp', []);
+      app.controller('myController', function($scope) {
+        $scope.mbmList = [{
+          "option": "00",
+          "ann_ppp_cost": "14521",
+          "ann_oop_cost": "3359",
+          "ann_tot_cost": "17880"
+        }, {
+          "option": "01",
+          "ann_ppp_cost": "11320",
+          "ann_oop_cost": "2853",
+          "ann_tot_cost": "14173"
+        }, {
+          "option": "01",
+          "ann_ppp_cost": "2500",
+          "ann_oop_cost": "7500",
+          "ann_tot_cost": "10000"
+        }];
+        $scope.highestCost = Math.max.apply(Math, $scope.mbmList.map(function(list) {
+          return list.ann_tot_cost;
+        }))
+      });
+      
+      // animation for stackedBar 
+      $('.progress-bar').each(function() { $(this).parent().css({"width":100,"float":"right"}); });
+      
     </script>
-</body>
-
+  </body>
 </html>
